@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة التقاط النقاط</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .dot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .scoreboard {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgb(0, 0, 0);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="scoreboard">
+        <span>النتيجة: <span id="score">0</span></span>
+        <span> | الوقت: <span id="timer">30</span> ثانية</span>
+    </div>
+    <div class="game-container" id="game-container"></div>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+
+        // Create a dot
+        function createDot() {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+
+            // Set random position
+            const x = Math.random() * (window.innerWidth - 30);
+            const y = Math.random() * (window.innerHeight - 30);
+            dot.style.left = `${x}px`;
+            dot.style.top = `${y}px`;
+
+            // Add click event to increase score
+            dot.addEventListener('click', () => {
+                score++;
+                scoreDisplay.textContent = score;
+                dot.remove();
+                createDot(); // Create a new dot after clicking
+            });
+
+            gameContainer.appendChild(dot);
+        }
+
+        // Update timer
+        function startTimer() {
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // End game
+        function endGame() {
+            alert(`انتهى الوقت! النتيجة النهائية: ${score}`);
+            gameContainer.innerHTML = '';
+            score = 0;
+            scoreDisplay.textContent = score;
+            timeLeft = 30;
+            timerDisplay.textContent = timeLeft;
+        }
+
+        // Start game
+        function startGame() {
+            createDot();
+            startTimer();
+        }
+
+        // Initialize game on page load
+        window.onload = startGame;
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Bar Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        #chart-container {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        #chart {
+            display: flex;
+            align-items: flex-end;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .y-axis {
+            position: absolute;
+            left: -40px;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-right: 5px;
+            font-size: 12px;
+        }
+
+        .bar {
+            background-color: #4CAF50;
+            margin: 0 5px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            transition: height 0.3s ease;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #000;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Bar Chart</h1>
+        <div class="form-group">
+            <input type="text" id="category" placeholder="Category" required>
+            <input type="number" id="value" placeholder="Value" required>
+            <button onclick="addData()">Add</button>
+        </div>
+
+        <div id="chart-container">
+            <div class="y-axis">
+                <span>300</span>
+                <span>200</span>
+                <span>100</span>
+                <span>0</span>
+            </div>
+            <div id="chart"></div>
+        </div>
+    </div>
+
+    <script>
+        const chart = document.getElementById('chart');
+        
+        function addData() {
+            const category = document.getElementById('category').value.trim();
+            const value = parseInt(document.getElementById('value').value.trim());
+
+            if (!category || isNaN(value)) {
+                alert('Please enter a valid category and value.');
+                return;
+            }
+
+            // Create bar
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = `${value}px`;
+            bar.style.width = '50px';
+
+            // Add value to bar
+            const barValue = document.createElement('span');
+            barValue.textContent = value;
+            barValue.style.position = 'absolute';
+            barValue.style.bottom = `${value + 5}px`;
+            barValue.style.left = '0';
+            barValue.style.right = '0';
+            barValue.style.textAlign = 'center';
+            bar.appendChild(barValue);
+
+            // Add label
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = category;
+            bar.appendChild(label);
+
+            chart.appendChild(bar);
+
+            // Clear inputs
+            document.getElementById('category').value = '';
+            document.getElementById('value').value = '';
+        }
+    </script>
+</body>
+</html>

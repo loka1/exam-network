@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحكم بالصورة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .image-container {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ccc;
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .arrow-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .arrow-buttons button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>التحكم بالصورة</h1>
+    <div class="image-container">
+        <img id="image" src="/ball.png" alt="صورة قابلة للتحكم">
+    </div>
+
+    <div class="controls">
+        <button onclick="zoomIn()">+</button>
+        <button onclick="zoomOut()">-</button>
+    </div>
+
+    <div class="arrow-buttons">
+        <button onclick="moveImage('up')">&#8593;</button>
+        <button onclick="moveImage('left')">&#8592;</button>
+        <button onclick="moveImage('down')">&#8595;</button>
+        <button onclick="moveImage('right')">&#8594;</button>
+    </div>
+
+    <script>
+        const image = document.getElementById('image');
+        let scale = 1;
+        let position = { top: 0, left: 0 };
+
+        function zoomIn() {
+            scale += 0.1;
+            updateTransform();
+        }
+
+        function zoomOut() {
+            scale = Math.max(0.1, scale - 0.1);
+            updateTransform();
+        }
+
+        function moveImage(direction) {
+            const step = 10; // المسافة التي تتحرك بها الصورة في كل مرة
+
+            if (direction === 'up') {
+                position.top -= step;
+            } else if (direction === 'down') {
+                position.top += step;
+            } else if (direction === 'left') {
+                position.left -= step;
+            } else if (direction === 'right') {
+                position.left += step;
+            }
+            updateTransform();
+        }
+
+        function updateTransform() {
+            image.style.transform = `scale(${scale}) translate(${position.left}px, ${position.top}px)`;
+        }
+    </script>
+</body>
+</html>

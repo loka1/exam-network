@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .quiz-question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+        .quiz-options li {
+            background: #e0e0e0;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .quiz-options li:hover {
+            background: #d4d4d4;
+        }
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+        .correct {
+            color: #28a745;
+        }
+        .incorrect {
+            color: #dc3545;
+        }
+        .highlight {
+            background: #28a745;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-question" id="question">Loading...</div>
+        <ul class="quiz-options" id="options"></ul>
+        <div class="message" id="message"></div>
+        <button id="next-button" style="display:none; margin-top: 10px;">Next Question</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                answer: 2
+            },
+            {
+                question: "What is 5 + 3?",
+                options: ["5", "8", "7", "10"],
+                answer: 1
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                answer: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const messageElement = document.getElementById("message");
+        const nextButton = document.getElementById("next-button");
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = "";
+            messageElement.style.display = "none";
+            nextButton.style.display = "none";
+
+            currentQuestion.options.forEach((option, index) => {
+                const li = document.createElement("li");
+                li.textContent = option;
+                li.onclick = () => handleAnswer(index);
+                optionsElement.appendChild(li);
+            });
+        }
+
+        function handleAnswer(selectedIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const correctIndex = currentQuestion.answer;
+
+            if (selectedIndex === correctIndex) {
+                messageElement.textContent = "Correct Answer!";
+                messageElement.className = "message correct";
+                optionsElement.children[selectedIndex].classList.add("highlight");
+            } else {
+                messageElement.textContent = "Wrong Answer!";
+                messageElement.className = "message incorrect";
+                optionsElement.children[correctIndex].classList.add("highlight");
+            }
+
+            messageElement.style.display = "block";
+            Array.from(optionsElement.children).forEach(li => li.onclick = null);
+            nextButton.style.display = "block";
+        }
+
+        nextButton.onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                questionElement.textContent = "Quiz Completed!";
+                optionsElement.innerHTML = "";
+                messageElement.style.display = "none";
+                nextButton.style.display = "none";
+            }
+        };
+
+        loadQuestion();
+    </script>
+</body>
+</html>
